@@ -392,13 +392,13 @@ var View = fc.View = Class.extend({
 
 	// Binds DOM handlers to elements that reside outside the view container, such as the document
 	bindGlobalHandlers: function() {
-		$(document).on('mousedown', this.documentMousedownProxy);
+		$(document).on('mousedown touchstart', this.documentMousedownProxy);
 	},
 
 
 	// Unbinds DOM handlers from elements that reside outside the view container
 	unbindGlobalHandlers: function() {
-		$(document).off('mousedown', this.documentMousedownProxy);
+		$(document).off('mousedown touchstart', this.);
 	},
 
 
@@ -827,7 +827,7 @@ var View = fc.View = Class.extend({
 	// Handler for unselecting when the user clicks something and the 'unselectAuto' setting is on
 	documentMousedown: function(ev) {
 		var ignore;
-
+        ev = touchEventToMouseEvent(ev);
 		// is there a selection, and has the user made a proper left click?
 		if (this.isSelected && this.opt('unselectAuto') && isPrimaryMouseButton(ev)) {
 

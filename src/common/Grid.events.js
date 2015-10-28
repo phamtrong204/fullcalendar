@@ -193,7 +193,8 @@ Grid.mixin({
 				click: function(seg, ev) {
 					return view.trigger('eventClick', this, seg.event, ev); // can return `false` to cancel
 				},
-				mousedown: function(seg, ev) {
+				"mousedown touchstart": function(seg, ev) {
+                    ev = touchEventToMouseEvent(ev);
 					if ($(ev.target).is('.fc-resizer') && view.isEventResizable(seg.event)) {
 						_this.segResizeMousedown(seg, ev, $(ev.target).is('.fc-start-resizer'));
 					}

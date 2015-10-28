@@ -49,7 +49,7 @@ var MouseFollower = Class.extend({
 				this.updatePosition();
 			}
 
-			$(document).on('mousemove', this.mousemoveProxy = proxy(this, 'mousemove'));
+			$(document).on('mousemove touchmove', this.mousemoveProxy = proxy(this, 'mousemove'));
 		}
 	},
 
@@ -74,7 +74,7 @@ var MouseFollower = Class.extend({
 		if (this.isFollowing && !this.isAnimating) { // disallow more than one stop animation at a time
 			this.isFollowing = false;
 
-			$(document).off('mousemove', this.mousemoveProxy);
+			$(document).off('mousemove touchmove', this.mousemoveProxy);
 
 			if (shouldRevert && revertDuration && !this.isHidden) { // do a revert animation?
 				this.isAnimating = true;
@@ -153,6 +153,7 @@ var MouseFollower = Class.extend({
 
 	// Gets called when the user moves the mouse
 	mousemove: function(ev) {
+        ev = touchEventToMouseEvent(ev);
 		this.topDelta = ev.pageY - this.mouseY0;
 		this.leftDelta = ev.pageX - this.mouseX0;
 

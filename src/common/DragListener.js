@@ -42,7 +42,14 @@ var DragListener = fc.DragListener = Class.extend({
 
 	// Call this when the user does a mousedown. Will probably lead to startListening
 	mousedown: function(ev) {
-		if (isPrimaryMouseButton(ev)) {
+        var _dragFlag = false;
+        if (ev.type == 'touchstart') {
+            ev = touchEventToMouseEvent(ev);
+            _dragFlag = true;
+        } else {
+            _dragFlag = isPrimaryMouseButton(ev);
+        }
+		if (_dragFlag) {
 
 			ev.preventDefault(); // prevents native selection in most browsers
 
@@ -75,8 +82,8 @@ var DragListener = fc.DragListener = Class.extend({
 			}
 
 			$(document)
-				.on('mousemove', this.mousemoveProxy = proxy(this, 'mousemove'))
-				.on('mouseup', this.mouseupProxy = proxy(this, 'mouseup'))
+				.on('mousemove touchmove', this.mousemoveProxy = proxy(this, 'mousemove'))
+				.on('mouseup touchend', this.mouseupProxy = proxy(this, 'mouseup'))
 				.on('selectstart', this.preventDefault); // prevents native selection in IE<=8
 
 			if (ev) {
@@ -104,6 +111,7 @@ var DragListener = fc.DragListener = Class.extend({
 
 	// Called when the user moves the mouse
 	mousemove: function(ev) {
+        ev = touchEventToMouseEvent(ev);
 		var dx = ev.pageX - this.originX;
 		var dy = ev.pageY - this.originY;
 		var minDistance;
@@ -161,6 +169,7 @@ var DragListener = fc.DragListener = Class.extend({
 
 	// Called when the user does a mouseup
 	mouseup: function(ev) {
+        ev = touchEventToMouseEvent(ev)
 		this.stopListening(ev);
 	},
 
@@ -204,8 +213,8 @@ var DragListener = fc.DragListener = Class.extend({
 			}
 
 			$(document)
-				.off('mousemove', this.mousemoveProxy)
-				.off('mouseup', this.mouseupProxy)
+				.off('mousemove touchmove', this.mousemoveProxy)
+				.off('mouseup touchend', this.mouseupProxy)
 				.off('selectstart', this.preventDefault);
 
 			this.mousemoveProxy = null;

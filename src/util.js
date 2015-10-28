@@ -851,3 +851,22 @@ function debounce(func, wait) {
 		}
 	};
 }
+
+//Convert touch event to mouse event
+function touchEventToMouseEvent(ev) {
+    var _touchEvent = ["touchstart", "touchend", "touchmove"];
+    if (_touchEvent.indexOf(ev.type) !== -1 &&
+        ev.originalEvent.touches.length) {
+        var touch = ev.originalEvent.touches[0];
+        ev.clientX = touch.clientX;
+        ev.clientY = touch.clientY;
+        ev.pageX = touch.pageX;
+        ev.pageY = touch.pageY;
+        ev.screenX = touch.screenX;
+        ev.screenY = touch.screenY;
+        ev.radiusX = touch.radiusX;
+        ev.radiusY = touch.radiusY;
+        ev.rotationAngle = touch.rotationAngle;
+    }
+    return ev;
+}
